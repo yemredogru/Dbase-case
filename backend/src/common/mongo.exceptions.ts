@@ -7,8 +7,23 @@ export class MongoExceptionFilter implements ExceptionFilter {
     const response = host.switchToHttp().getResponse();
     switch (exception.code) {
       case 11000:
+        let duplicateField = "Unknown field";
+        
+        if (exception.message.includes('email')) {
+          duplicateField = 'Email';
+        } else if (exception.message.includes('userName')) {
+          duplicateField = 'Username';
+        } else if (exception.message.includes('phone')) {
+          duplicateField = 'Phone number';
+        }
+
         response.status(HttpStatus.CONFLICT).json({
-          message: 'Duplicate key error. This email is already in use.',
+          message: `Duplicate key error. This ${duplicateField} is already in use.`,
+        });
+        break;
+      case 121:
+        response.status(HttpStatus.BAD_REQUEST).json({
+          message: 'Invalid phone number format.',
         });
         break;
       default:
