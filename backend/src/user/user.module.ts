@@ -7,13 +7,12 @@ import { UserService } from './user.service';
 import { userSchema } from './user.model';
 import { APP_FILTER } from '@nestjs/core';
 import { MongoExceptionFilter } from 'src/common/mongo.exceptions';
+import { DatabaseModule } from 'src/database/database.module';
+import { DatabaseService } from 'src/database/database.service';
 
 @Module({
-    imports:[MongooseModule.forFeature([{name:'User',schema:userSchema}])],
+    imports:[DatabaseModule],
     controllers: [UserController],
-    providers: [UserService,{
-        provide:APP_FILTER,
-        useClass:MongoExceptionFilter
-    }],
+    providers: [UserService,DatabaseService,{provide:APP_FILTER,useClass:MongoExceptionFilter}],
 })
 export class UserModule {}
