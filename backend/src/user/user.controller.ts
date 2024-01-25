@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, ValidationPipe, UseFilters } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MongoExceptionFilter } from 'src/common/mongo.exceptions';
 import { CreateUserDto } from './user.dto';
@@ -10,12 +10,8 @@ export class UserController {
     @Post('addUser')
     @UsePipes(new ValidationPipe({ transform: true }))
     async addUser(@Body() createUserDto: CreateUserDto) {
-      const createdUser = await this.userService.register(
-        createUserDto.userName,
-        createUserDto.email,
-        createUserDto.password,
-        createUserDto.birthDate,
-        createUserDto.phone
+      const createdUser = await this.userService.create(
+        createUserDto
       );
   
       return { result: createdUser };
