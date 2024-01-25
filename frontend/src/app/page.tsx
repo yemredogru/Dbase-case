@@ -55,7 +55,7 @@ export default function SignUp() {
       phone,
     })
     .then((response) => {
-      console.log(response.data);
+       toast.success('Successfull')
     })
     .catch((error) => {
       console.error(error);
